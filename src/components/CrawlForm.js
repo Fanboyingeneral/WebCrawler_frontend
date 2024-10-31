@@ -1,31 +1,33 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Checkbox, Button, Typography, FormControlLabel, Box, Container, Paper } from '@mui/material';
+import { TextField, Checkbox, Button, Typography, FormControlLabel, Box, Container, Paper, Collapse } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 
 function CrawlForm() {
   const [url, setUrl] = useState('');
   const [maxUrls, setMaxUrls] = useState(5);
   const [respectRobotFlag, setRespectRobotFlag] = useState(false);
   const [message, setMessage] = useState('');
-  
+  const [isScheduling, setIsScheduling] = useState(false);
+  const [scheduledTime, setScheduledTime] = useState(new Date());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      
-      
-      
-      const response = await axios.post('http://localhost:5000/api/crawl', {
+      const endpoint = isScheduling ? 'http://localhost:5000/api/crawl/scheduled' : 'http://localhost:5000/api/crawl';
+      const payload = {
         url,
         maxUrls,
         respectRobotFlag,
-      });
-
+        ...(isScheduling && { scheduledTime }),
+      };
+      console.log('Payload:', payload);
+      const response = await axios.post(endpoint, payload);
       const { message } = response.data;
-
       setMessage(message);
-      
     } catch (error) {
       console.error('Error crawling URL:', error);
       setMessage('Failed to crawl the URL');
@@ -71,9 +73,39 @@ function CrawlForm() {
               label="Respect robots.txt"
             />
           </Box>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            Start Crawl
+
+          <Button
+            variant="text"
+            color="primary"
+            onClick={() => setIsScheduling(!isScheduling)}
+            fullWidth
+            style={{ marginBottom: '1rem' }}
+          >
+            Want to schedule a crawl? Click here
           </Button>
+
+          <Collapse in={isScheduling}>
+            <Box mb={2}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                label="Select Date & Time for Crawl"
+                value={scheduledTime}
+                onChange={(newValue) => setScheduledTime(newValue)}
+                renderInput={(props) => <TextField {...props} fullWidth />}
+              />
+            </LocalizationProvider>
+            </Box>
+          </Collapse>
+
+          {!isScheduling ? (
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Start Crawl
+            </Button>
+          ) : (
+            <Button variant="contained" color="secondary" type="submit" fullWidth>
+              Schedule Crawl
+            </Button>
+          )}
         </form>
 
         {message && (
@@ -81,7 +113,6 @@ function CrawlForm() {
             {message}
           </Typography>
         )}
-
       </Paper>
     </Container>
   );
