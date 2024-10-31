@@ -7,29 +7,28 @@ function CrawlForm() {
   const [maxUrls, setMaxUrls] = useState(5);
   const [respectRobotFlag, setRespectRobotFlag] = useState(false);
   const [message, setMessage] = useState('');
-  const [scrapedUrls, setScrapedUrls] = useState({});
-  const [externalUrls, setExternalUrls] = useState([]);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      
+      
+      
       const response = await axios.post('http://localhost:5000/api/crawl', {
         url,
         maxUrls,
         respectRobotFlag,
       });
 
-      const { message, scraped_urls, external_urls } = response.data;
+      const { message } = response.data;
 
       setMessage(message);
-      setScrapedUrls(scraped_urls);
-      setExternalUrls(external_urls);
+      
     } catch (error) {
       console.error('Error crawling URL:', error);
       setMessage('Failed to crawl the URL');
-      setScrapedUrls({});
-      setExternalUrls([]);
     }
   };
 
@@ -83,36 +82,6 @@ function CrawlForm() {
           </Typography>
         )}
 
-        {Object.keys(scrapedUrls).length > 0 && (
-          <Box mt={2}>
-            <Typography variant="h5" gutterBottom>
-              Scraped URLs and Content
-            </Typography>
-            {Object.entries(scrapedUrls).map(([url, content], index) => (
-              <Box key={index} mb={2}>
-                <Typography variant="h6">{url}</Typography>
-                <Paper style={{ padding: '1rem', backgroundColor: '#f5f5f5' }}>
-                  <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-                    {content}
-                  </pre>
-                </Paper>
-              </Box>
-            ))}
-          </Box>
-        )}
-
-        {externalUrls.length > 0 && (
-          <Box mt={2}>
-            <Typography variant="h5" gutterBottom>
-              External URLs
-            </Typography>
-            <ul>
-              {externalUrls.map((url, index) => (
-                <li key={index}>{url}</li>
-              ))}
-            </ul>
-          </Box>
-        )}
       </Paper>
     </Container>
   );
