@@ -4,6 +4,7 @@ import { TextField, Checkbox, Button, Typography, FormControlLabel, Box, Contain
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useNavigate } from 'react-router-dom';
 
 
 function CrawlForm() {
@@ -13,6 +14,7 @@ function CrawlForm() {
   const [message, setMessage] = useState('');
   const [isScheduling, setIsScheduling] = useState(false);
   const [scheduledTime, setScheduledTime] = useState(new Date());
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +39,17 @@ function CrawlForm() {
   return (
     <Container maxWidth="md" style={{ marginTop: '2rem' }}>
       <Paper elevation={3} style={{ padding: '2rem' }}>
+      <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate('/register-spot-instance')}
+          fullWidth
+          style={{ marginBottom: '1rem' }}
+        >
+          Register your machine as a spot instance?
+        </Button>
+        
+        
         <Typography variant="h4" gutterBottom>
           Web Crawler
         </Typography>
