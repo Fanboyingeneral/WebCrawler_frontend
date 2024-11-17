@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Checkbox, Button, Typography, FormControlLabel, Box, Container, Paper } from '@mui/material';
 
+const BACKEND_PORT = process.env.BACKEND_PORT || 7100;
+
 function ClientCrawlForm() {
   const [url, setUrl] = useState('');
   const [maxUrls, setMaxUrls] = useState(5);
@@ -12,7 +14,7 @@ function ClientCrawlForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = 'http://localhost:5000/api/session/queueCrawl'; // Client backend endpoint
+      const endpoint = `http://localhost:${BACKEND_PORT}/api/session/queueCrawl`; // Client backend endpoint
       const payload = {
         session_id: sessionId,
         url,

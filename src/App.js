@@ -14,7 +14,6 @@ function App() {
         <Route path="/" element={
           <>
             <CrawlForm />
-            <DownloadScriptButton />
             <CrawlRecords />
           </>
         } />

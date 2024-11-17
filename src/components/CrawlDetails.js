@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Typography, List, ListItem, ListItemText, Paper, Container } from '@mui/material';
 
+const BACKEND_PORT = process.env.BACKEND_PORT || 7100;
+
 function CrawlDetails() {
   const { crawlId } = useParams();
   const [crawlDetails, setCrawlDetails] = useState(null);
@@ -11,7 +13,7 @@ function CrawlDetails() {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/crawl/records/${crawlId}`);
+        const response = await axios.get(`http://localhost:${BACKEND_PORT}/api/crawl/records/${crawlId}`);
         setCrawlDetails(response.data);
       } catch (error) {
         console.error('Error fetching crawl details:', error);

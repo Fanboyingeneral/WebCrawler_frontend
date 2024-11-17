@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Typography, Paper, Container } from '@mui/material';
 
+const BACKEND_PORT = process.env.BACKEND_PORT || 7100;
+
 function PageContent() {
   const { crawlId, pageId } = useParams();
   const [pageData, setPageData] = useState(null);
@@ -10,7 +12,7 @@ function PageContent() {
   useEffect(() => {
     const fetchPageData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/crawl/records/${crawlId}/page/${pageId}`);
+        const response = await axios.get(`http://localhost:${BACKEND_PORT}/api/crawl/records/${crawlId}/page/${pageId}`);
         setPageData(response.data);
       } catch (error) {
         console.error('Error fetching page data:', error);

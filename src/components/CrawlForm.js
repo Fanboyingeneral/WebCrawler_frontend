@@ -6,6 +6,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useNavigate } from 'react-router-dom';
 
+const BACKEND_PORT = process.env.BACKEND_PORT || 7100;
 
 function CrawlForm() {
   const [url, setUrl] = useState('');
@@ -19,7 +20,7 @@ function CrawlForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = isScheduling ? 'http://localhost:5000/api/crawl/scheduled' : 'http://localhost:5000/api/crawl';
+      const endpoint = isScheduling ? `http://localhost:${BACKEND_PORT}/api/crawl/scheduled` : `http://localhost:${BACKEND_PORT}/api/crawl`;
       const payload = {
         url,
         maxUrls,

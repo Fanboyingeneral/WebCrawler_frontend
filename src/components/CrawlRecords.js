@@ -3,6 +3,9 @@ import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+
+const BACKEND_PORT = process.env.BACKEND_PORT || 7100;
+
 function CrawlRecords() {
   const [completedCrawls, setCompletedCrawls] = useState([]);
   const [scheduledCrawls, setScheduledCrawls] = useState([]);
@@ -12,7 +15,8 @@ function CrawlRecords() {
     // Function to fetch completed crawls
     const fetchCompletedCrawls = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/crawl/records');
+        console.log(`http://localhost:${BACKEND_PORT}/api/crawl/records`);
+        const response = await axios.get(`http://localhost:${BACKEND_PORT}/api/crawl/records`);
         setCompletedCrawls(response.data);
       } catch (error) {
         console.error('Error fetching completed crawl records:', error);
@@ -22,7 +26,7 @@ function CrawlRecords() {
     // Function to fetch scheduled crawls
     const fetchScheduledCrawls = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/crawl/getScheduledCrawls');
+        const response = await axios.get(`http://localhost:${BACKEND_PORT}/api/crawl/getScheduledCrawls`);
         setScheduledCrawls(response.data);
       } catch (error) {
         console.error('Error fetching scheduled crawl records:', error);
@@ -46,7 +50,7 @@ function CrawlRecords() {
   // Delete function for Scheduled Crawls
   const deleteScheduledCrawl = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/crawl/deleteScheduledCrawl/${id}`);
+      await axios.delete(`http://localhost:${BACKEND_PORT}/api/crawl/deleteScheduledCrawl/${id}`);
       setScheduledCrawls(scheduledCrawls.filter(crawl => crawl._id !== id));
     } catch (error) {
       console.error('Error deleting scheduled crawl:', error);
@@ -56,7 +60,7 @@ function CrawlRecords() {
   // Delete function for Completed Crawls
   const deleteCompletedCrawl = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/crawl/deleteCompletedCrawl/${id}`);
+      await axios.delete(`http://localhost:${BACKEND_PORT}/api/crawl/deleteCompletedCrawl/${id}`);
       setCompletedCrawls(completedCrawls.filter(crawl => crawl.crawl_id !== id));
     } catch (error) {
       console.error('Error deleting completed crawl:', error);
